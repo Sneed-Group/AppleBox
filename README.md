@@ -1,2 +1,2 @@
 # AppleBox
-Covnerts Apple Silicon binaries to x86_64
+Covnerts Apple Silicon/ARM64 binaries to x86_64
