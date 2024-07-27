@@ -315,7 +315,7 @@ def translate_arm64_to_x86(arm64_ins):
         x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))  # Simplified example for setting state
 
     elif arm64_ins.mnemonic == 'clr':
-        x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], 0])  # Simplified example for clearing state
+        x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], 0]))  # Simplified example for clearing state
 
     elif arm64_ins.mnemonic == 'ldx':
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
