@@ -76,11 +76,6 @@ def translate_arm64_to_x86(arm64_ins):
         if operands[0] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
 
-    elif arm64_ins.mnemonic == 'stz':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[0]}]", reg_mapping[operands[1]]]))
-
     elif 'fma' in arm64_ins.mnemonic and '(63=0)' in arm64_ins.op_str:
         operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
@@ -98,27 +93,7 @@ def translate_arm64_to_x86(arm64_ins):
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('vmulps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[1]]]))
             x86_instructions.append(generate_x86_instruction('vaddps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-    elif 'vec' in arm64_ins.mnemonic and '(47≠4)' in arm64_ins.op_str:
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping and operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('vaddps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-    elif 'vec' in arm64_ins.mnemonic and '(47=4)' in arm64_ins.op_str:
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('vaddps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[0]]]))
-
-    elif arm64_ins.mnemonic == 'extrx':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping and operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-    elif arm64_ins.mnemonic == 'extry':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping and operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[1]], reg_mapping[operands[0]]]))
-
+    
     elif arm64_ins.mnemonic == 'smulh':
         operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
@@ -234,11 +209,6 @@ def translate_arm64_to_x86(arm64_ins):
         if operands[1] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[0]}]", reg_mapping[operands[1]]]))
 
-    elif arm64_ins.mnemonic == 'stz':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[0]}]", reg_mapping[operands[1]]]))
-
     elif 'fma' in arm64_ins.mnemonic and '(63=0)' in arm64_ins.op_str:
         operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
@@ -261,23 +231,8 @@ def translate_arm64_to_x86(arm64_ins):
         operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('vaddps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-    elif 'vec' in arm64_ins.mnemonic and '(47=4)' in arm64_ins.op_str:
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('vaddps', [reg_mapping[operands[0]], reg_mapping[operands[0]], reg_mapping[operands[0]]]))
-
-    elif arm64_ins.mnemonic == 'extrx':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping and operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-    elif arm64_ins.mnemonic == 'extry':
-        operands = arm64_ins.op_str.split(', ')
-        if operands[0] in reg_mapping and operands[1] in reg_mapping:
-            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[1]], reg_mapping[operands[0]]]))
-
-  elif arm64_ins.mnemonic == 'umull':
+    
+    elif arm64_ins.mnemonic == 'umull':
         if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping and operands[3] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[2]], f"[{reg_mapping[operands[0]]} * {reg_mapping[operands[1]]}]"]))
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[3]], f"[{reg_mapping[operands[0]]} * {reg_mapping[operands[1]]}]"]))
@@ -402,55 +357,48 @@ def translate_arm64_to_x86(arm64_ins):
         operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('divss', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-        elif arm64_ins.mnemonic == 'extrx':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
 
-        elif arm64_ins.mnemonic == 'extry':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
+    elif arm64_ins.mnemonic == 'extrh':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
+        
+    elif arm64_ins.mnemonic == 'extrv':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
+    elif arm64_ins.mnemonic == 'ldx':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
+        
+    elif arm64_ins.mnemonic == 'ldy':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
+        
+    elif arm64_ins.mnemonic == 'ldz':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
+        
+    elif arm64_ins.mnemonic == 'stx':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]}]", reg_mapping[operands[0]]]))
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Store pair
+        
+    elif arm64_ins.mnemonic == 'stz':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]}]", reg_mapping[operands[0]]]))
+            x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Store pair
+        
+    elif arm64_ins.mnemonic == 'fma64':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
+            x86_instructions.append(generate_x86_instruction('addsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
 
-        elif arm64_ins.mnemonic == 'extrh':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
-        
-        elif arm64_ins.mnemonic == 'extrv':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
-        elif arm64_ins.mnemonic == 'ldx':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
-        
-        elif arm64_ins.mnemonic == 'ldy':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
-        
-        elif arm64_ins.mnemonic == 'ldz':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], f"[{operands[1]}]"]))
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Load pair
-        
-        elif arm64_ins.mnemonic == 'stx':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]}]", reg_mapping[operands[0]]]))
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Store pair
-        
-        elif arm64_ins.mnemonic == 'stz':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]}]", reg_mapping[operands[0]]]))
-                x86_instructions.append(generate_x86_instruction('mov', [f"[{operands[1]+8}]", reg_mapping[operands[0]]]))  # Store pair
-        
-        elif arm64_ins.mnemonic == 'fma64':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
-                x86_instructions.append(generate_x86_instruction('addsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
-        elif arm64_ins.mnemonic == 'fms64':
-            if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
-                x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
-                x86_instructions.append(generate_x86_instruction('subsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
+    elif arm64_ins.mnemonic == 'fms64':
+        if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
+            x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
+            x86_instructions.append(generate_x86_instruction('subsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
 
     return x86_instructions
 
