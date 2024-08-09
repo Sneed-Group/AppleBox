@@ -39,13 +39,12 @@ def translate_arm64_to_x86(arm64_ins):
         'x28': 'r28', 'x29': 'r29', 'x30': 'r30'
     }
 
-    x86_instructions = []
+x86_instructions = []
 
-    # TODO: CLEAN THIS UP
+# TODO: CLEAN THIS UP
 def generate_x86_instruction(opcode, operands):
-   x86_instructions = []
-   if arm64_ins.mnemonic == 'mov':
-    operands = arm64_ins.op_str.split(', ')
+    if arm64_ins.mnemonic == 'mov':
+        operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
 
@@ -399,8 +398,8 @@ def generate_x86_instruction(opcode, operands):
         if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
             x86_instructions.append(generate_x86_instruction('subsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-    print(x86_instructions)
-    return x86_instructions
+    print(f"{opcode} {', '.join(operands)}")
+    return f"{opcode} {', '.join(operands)}"
 
 def main():
     parser = argparse.ArgumentParser(description="Translates (Apple) ARM64 binary to x86_64 binary")
@@ -418,7 +417,7 @@ def main():
     x86_64_instructions = translate_instructions(arm64_instructions)
 
     # Assemble x86_64 instructions into new binary
-    assemble_x86_64(x86_64_instructions, x86_64_binary_path)
+    #assemble_x86_64(x86_instructions, x86_64_binary_path)
     print("Translation complete. x86_64 binary created at", x86_64_binary_path)
 
 if __name__ == "__main__":
