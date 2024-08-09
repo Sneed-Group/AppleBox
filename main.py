@@ -344,7 +344,7 @@ def translate_arm64_to_x86(arm64_ins):
     elif arm64_ins.mnemonic == 'isb':
         x86_instructions.append(generate_x86_instruction('sfence', []))  # Instruction synchronization
 
-   elif arm64_ins.mnemonic == 'eor':
+    elif arm64_ins.mnemonic == 'eor':
         if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
             x86_instructions.append(generate_x86_instruction('xor', [reg_mapping[operands[0]], reg_mapping[operands[2]]]))
