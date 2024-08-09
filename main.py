@@ -16,6 +16,7 @@ def translate_instructions(arm64_instructions):
     for ins in arm64_instructions:
         x86_instruction = translate_arm64_to_x86(ins)
         translated_instructions.extend(x86_instruction)
+    print(translated_instructions)
     return translated_instructions
 
 # Assemble x86_64 instructions into binary
@@ -41,11 +42,10 @@ def translate_arm64_to_x86(arm64_ins):
     x86_instructions = []
 
     # TODO: CLEAN THIS UP
-    def generate_x86_instruction(opcode, operands):
-        return f"{opcode} {', '.join(operands)}"
-
-    if arm64_ins.mnemonic == 'mov':
-        operands = arm64_ins.op_str.split(', ')
+def generate_x86_instruction(opcode, operands):
+   x86_instructions = []
+   if arm64_ins.mnemonic == 'mov':
+    operands = arm64_ins.op_str.split(', ')
         if operands[0] in reg_mapping and operands[1] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mov', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
 
@@ -399,7 +399,7 @@ def translate_arm64_to_x86(arm64_ins):
         if operands[0] in reg_mapping and operands[1] in reg_mapping and operands[2] in reg_mapping:
             x86_instructions.append(generate_x86_instruction('mulsd', [reg_mapping[operands[1]], reg_mapping[operands[2]]]))
             x86_instructions.append(generate_x86_instruction('subsd', [reg_mapping[operands[0]], reg_mapping[operands[1]]]))
-
+    print(x86_instructions)
     return x86_instructions
 
 def main():
